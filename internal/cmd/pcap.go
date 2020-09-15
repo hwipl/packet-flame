@@ -14,7 +14,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	layers := ""
 	for _, l := range packet.Layers() {
 		if layers != "" {
-			layers += ","
+			layers += ";"
 		}
 		layers += l.LayerType().String()
 
