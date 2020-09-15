@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/google/gopacket"
@@ -19,7 +18,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		layers += l.LayerType().String()
 
 	}
-	fmt.Println(layers)
+	counter[layers]++
 }
 
 // listen captures packets on the network interface or reads them from a pcap

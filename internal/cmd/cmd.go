@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"flag"
+	"fmt"
 )
 
 var (
@@ -14,6 +15,9 @@ var (
 	pcapMaxPkts int  = 0
 	pcapMaxTime int  = 0
 	pcapFilter  string
+
+	// packet layer packet/byte counter
+	counter = make(map[string]int)
 )
 
 // parseCommandLine parses the command line arguments
@@ -42,8 +46,16 @@ func parseCommandLine() {
 	flag.Parse()
 }
 
+// printCounter prints all packet layers and their count
+func printCounter() {
+	for l, c := range counter {
+		fmt.Println(l, c)
+	}
+}
+
 // Run is the main entry point
 func Run() {
 	parseCommandLine()
 	listen()
+	printCounter()
 }
