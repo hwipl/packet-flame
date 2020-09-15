@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/google/gopacket"
 	"github.com/hwipl/packet-go/pkg/pcap"
@@ -30,6 +31,14 @@ func listen() {
 	// create listener
 	listener := pcap.Listener{
 		PacketHandler: &handler,
+		File:          pcapFile,
+		Device:        pcapDevice,
+		Promisc:       pcapPromisc,
+		Snaplen:       pcapSnaplen,
+		Timeout:       time.Duration(pcapTimeout) * time.Millisecond,
+		Filter:        pcapFilter,
+		MaxPkts:       pcapMaxPkts,
+		MaxTime:       time.Duration(pcapMaxTime) * time.Second,
 	}
 
 	// start listen loop
