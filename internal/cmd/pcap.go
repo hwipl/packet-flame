@@ -31,6 +31,10 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 				layers += ";Port_" + dst.String()
 				layers += ";Port_" + src.String()
 			}
+
+			// add flow direction information
+			layers += ";Port_" + src.String() + "->Port_" +
+				dst.String()
 		}
 
 	}
