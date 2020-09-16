@@ -33,6 +33,10 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 				layers += ";MAC_" + dst.String()
 				layers += ";MAC_" + src.String()
 			}
+
+			// add flow direction information
+			layers += ";MAC_" + src.String() + "->MAC_" +
+				dst.String()
 		}
 
 		// add address information for the network layer
