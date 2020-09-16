@@ -11,11 +11,27 @@ type handler struct{}
 
 func (h *handler) HandlePacket(packet gopacket.Packet) {
 	layers := ""
+	transport := packet.TransportLayer()
 	for _, l := range packet.Layers() {
 		if layers != "" {
 			layers += ";"
 		}
+
+		// add layer name
 		layers += l.LayerType().String()
+
+		// add port information for the transport layer
+		if transport != nil && l.LayerType() == transport.LayerType() {
+			flow := transport.TransportFlow()
+			src, dst := flow.Endpoints()
+			if src.LessThan(dst) {
+				layers += ";Port_" + src.String()
+				layers += ";Port_" + dst.String()
+			} else {
+				layers += ";Port_" + dst.String()
+				layers += ";Port_" + src.String()
+			}
+		}
 
 	}
 	counter[layers]++
