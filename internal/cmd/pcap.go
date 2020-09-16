@@ -9,6 +9,24 @@ import (
 
 type handler struct{}
 
+func getFlowAddresses(flow gopacket.Flow, prefix string) string {
+	layers := ""
+	src, dst := flow.Endpoints()
+	if src.LessThan(dst) {
+		layers += ";" + prefix + "_" + src.String()
+		layers += ";" + prefix + "_" + dst.String()
+	} else {
+		layers += ";" + prefix + "_" + dst.String()
+		layers += ";" + prefix + "_" + src.String()
+	}
+
+	// add flow direction information
+	layers += ";" + prefix + "_" + src.String() + "->" + prefix + "_" +
+		dst.String()
+
+	return layers
+}
+
 func (h *handler) HandlePacket(packet gopacket.Packet) {
 	layers := ""
 	link := packet.LinkLayer()
@@ -24,53 +42,18 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 
 		// add address information for the link layer
 		if link != nil && l.LayerType() == link.LayerType() {
-			flow := link.LinkFlow()
-			src, dst := flow.Endpoints()
-			if src.LessThan(dst) {
-				layers += ";MAC_" + src.String()
-				layers += ";MAC_" + dst.String()
-			} else {
-				layers += ";MAC_" + dst.String()
-				layers += ";MAC_" + src.String()
-			}
-
-			// add flow direction information
-			layers += ";MAC_" + src.String() + "->MAC_" +
-				dst.String()
+			layers += getFlowAddresses(link.LinkFlow(), "MAC")
 		}
 
 		// add address information for the network layer
 		if network != nil && l.LayerType() == network.LayerType() {
-			flow := network.NetworkFlow()
-			src, dst := flow.Endpoints()
-			if src.LessThan(dst) {
-				layers += ";IP_" + src.String()
-				layers += ";IP_" + dst.String()
-			} else {
-				layers += ";IP_" + dst.String()
-				layers += ";IP_" + src.String()
-			}
-
-			// add flow direction information
-			layers += ";IP_" + src.String() + "->IP_" +
-				dst.String()
+			layers += getFlowAddresses(network.NetworkFlow(), "IP")
 		}
 
 		// add port information for the transport layer
 		if transport != nil && l.LayerType() == transport.LayerType() {
-			flow := transport.TransportFlow()
-			src, dst := flow.Endpoints()
-			if src.LessThan(dst) {
-				layers += ";Port_" + src.String()
-				layers += ";Port_" + dst.String()
-			} else {
-				layers += ";Port_" + dst.String()
-				layers += ";Port_" + src.String()
-			}
-
-			// add flow direction information
-			layers += ";Port_" + src.String() + "->Port_" +
-				dst.String()
+			layers += getFlowAddresses(transport.TransportFlow(),
+				"Port")
 		}
 
 	}
