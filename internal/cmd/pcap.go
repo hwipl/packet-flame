@@ -11,6 +11,7 @@ type handler struct{}
 
 func (h *handler) HandlePacket(packet gopacket.Packet) {
 	layers := ""
+	link := packet.LinkLayer()
 	network := packet.NetworkLayer()
 	transport := packet.TransportLayer()
 	for _, l := range packet.Layers() {
@@ -20,6 +21,19 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 
 		// add layer name
 		layers += l.LayerType().String()
+
+		// add address information for the link layer
+		if link != nil && l.LayerType() == link.LayerType() {
+			flow := link.LinkFlow()
+			src, dst := flow.Endpoints()
+			if src.LessThan(dst) {
+				layers += ";MAC_" + src.String()
+				layers += ";MAC_" + dst.String()
+			} else {
+				layers += ";MAC_" + dst.String()
+				layers += ";MAC_" + src.String()
+			}
+		}
 
 		// add address information for the network layer
 		if network != nil && l.LayerType() == network.LayerType() {
