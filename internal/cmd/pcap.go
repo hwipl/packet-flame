@@ -47,7 +47,8 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		}
 
 		// add address information for the network layer
-		if network != nil && l.LayerType() == network.LayerType() {
+		if showIPs && network != nil &&
+			l.LayerType() == network.LayerType() {
 			layers += getFlowAddresses(network.NetworkFlow(), "IP")
 		}
 
