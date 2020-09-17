@@ -53,7 +53,8 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		}
 
 		// add port information for the transport layer
-		if transport != nil && l.LayerType() == transport.LayerType() {
+		if showPorts && transport != nil &&
+			l.LayerType() == transport.LayerType() {
 			layers += getFlowAddresses(transport.TransportFlow(),
 				"Port")
 		}
