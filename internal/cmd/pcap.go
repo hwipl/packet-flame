@@ -41,7 +41,8 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		layers += l.LayerType().String()
 
 		// add address information for the link layer
-		if link != nil && l.LayerType() == link.LayerType() {
+		if showMACs && link != nil &&
+			l.LayerType() == link.LayerType() {
 			layers += getFlowAddresses(link.LinkFlow(), "MAC")
 		}
 

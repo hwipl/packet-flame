@@ -16,6 +16,9 @@ var (
 	pcapMaxTime int  = 0
 	pcapFilter  string
 
+	// display settings
+	showMACs       bool
+
 	// packet layer packet/byte counter
 	counter = make(map[string]int)
 )
@@ -41,6 +44,10 @@ func parseCommandLine() {
 			"(may require pcap-timeout argument)")
 	flag.StringVar(&pcapFilter, "pcap-filter", pcapFilter,
 		"set pcap packet filter to `filter` (e.g.: \"not port 22\")")
+
+	// display settings
+	flag.BoolVar(&showMACs, "with-macs", showMACs,
+		"show MAC addresses in output")
 
 	// parse and overwrite default values of settings
 	flag.Parse()
