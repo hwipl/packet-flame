@@ -21,8 +21,10 @@ func getFlowAddresses(flow gopacket.Flow, prefix string) string {
 	}
 
 	// add flow direction information
-	layers += ";" + prefix + "_" + src.String() + "->" + prefix + "_" +
-		dst.String()
+	if showDirections {
+		layers += ";" + prefix + "_" + src.String() + "->" + prefix +
+			"_" + dst.String()
+	}
 
 	return layers
 }

@@ -20,6 +20,7 @@ var (
 	showMACs       bool
 	showIPs        bool
 	showPorts      bool
+	showDirections bool
 
 	// packet layer packet/byte counter
 	counter = make(map[string]int)
@@ -54,6 +55,8 @@ func parseCommandLine() {
 		"show IP addresses in output")
 	flag.BoolVar(&showPorts, "with-ports", showPorts,
 		"show ports in output")
+	flag.BoolVar(&showDirections, "with-directions", showDirections,
+		"show flow directions in MAC, IP, port output")
 
 	// parse and overwrite default values of settings
 	flag.Parse()
