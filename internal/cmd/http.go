@@ -29,7 +29,11 @@ func handleRawRequest(w http.ResponseWriter, r *http.Request) {
 
 	// send sorted counters to client
 	for _, k := range keys {
-		io.WriteString(w, fmt.Sprintln(k, m[k]))
+		_, err := io.WriteString(w, fmt.Sprintln(k, m[k]))
+		if err != nil {
+			log.Println(err)
+			return
+		}
 	}
 }
 
