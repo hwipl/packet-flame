@@ -3,6 +3,7 @@ package cmd
 import (
 	"flag"
 	"fmt"
+	"strings"
 )
 
 var (
@@ -30,8 +31,44 @@ var (
 
 	// flamegraph tool settings
 	flamegraphExe  string
-	flamegraphArgs string
+	flamegraphArgs []string
 )
+
+// parseFlamegraphArgs parses arguments for the flamegraph tool and constructs
+// an argument list containing options beginning with "-" and other texts like
+// the following example:
+// ["--opt1", "text", "--opt2", "-opt3", "this is another text"]
+func parseFlamegraphArgs(fgArgs string) []string {
+	args := []string{}
+	text := ""
+	for _, s := range strings.Fields(fgArgs) {
+		if strings.HasPrefix(s, "-") {
+			// add concatenated text as separate argument
+			if text != "" {
+				args = append(args, text)
+				text = ""
+			}
+
+			// add option beginning with "-" as separate argument
+			args = append(args, s)
+			continue
+		}
+
+		// concatenate text until new option beginning with "-"
+		// is found (see above) or we reach the end (see below)
+		if text != "" {
+			text += " "
+		}
+		text += s
+	}
+
+	// add remaining text as separate argument
+	if text != "" {
+		args = append(args, text)
+	}
+
+	return args
+}
 
 // parseCommandLine parses the command line arguments
 func parseCommandLine() {
@@ -73,11 +110,17 @@ func parseCommandLine() {
 	flag.StringVar(&flamegraphExe, "fg-exe", flamegraphExe,
 		"set the flamegraph `executable` for graph generation "+
 			"(e.g.: flamegraph.pl)")
-	flag.StringVar(&flamegraphArgs, "fg-args", flamegraphArgs,
-		"set `arguments` for the flamegraph executable")
+	fgArgs := flag.String("fg-args", "",
+		"set `arguments` for the flamegraph executable "+
+			"(e.g.: \"--title test graph\")")
 
 	// parse and overwrite default values of settings
 	flag.Parse()
+
+	// parse flamegraph tool arguments
+	if *fgArgs != "" {
+		flamegraphArgs = parseFlamegraphArgs(*fgArgs)
+	}
 }
 
 // printCounter prints all packet layers and their count

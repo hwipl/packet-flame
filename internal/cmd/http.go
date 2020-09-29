@@ -26,9 +26,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 
 	// generate flamegraph
 	cmd := exec.Command(flamegraphExe)
-	if flamegraphArgs != "" {
-		args := strings.Split(flamegraphArgs, " ")
-		cmd = exec.Command(flamegraphExe, args...)
+	if flamegraphArgs != nil {
+		cmd = exec.Command(flamegraphExe, flamegraphArgs...)
 	}
 	cmd.Stdin = strings.NewReader(input)
 	cmd.Stdout = w
