@@ -30,6 +30,7 @@ var (
 
 	// flamegraph tool settings
 	flamegraphExe  string
+	flamegraphArgs string
 )
 
 // parseCommandLine parses the command line arguments
@@ -72,6 +73,8 @@ func parseCommandLine() {
 	flag.StringVar(&flamegraphExe, "fg-exe", flamegraphExe,
 		"set the flamegraph `executable` for graph generation "+
 			"(e.g.: flamegraph.pl)")
+	flag.StringVar(&flamegraphArgs, "fg-args", flamegraphArgs,
+		"set `arguments` for the flamegraph executable")
 
 	// parse and overwrite default values of settings
 	flag.Parse()
