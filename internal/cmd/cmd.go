@@ -23,7 +23,7 @@ var (
 	showDirections bool
 
 	// packet layer packet/byte counter
-	counter = make(map[string]int)
+	counter = newCountMap()
 )
 
 // parseCommandLine parses the command line arguments
@@ -64,7 +64,7 @@ func parseCommandLine() {
 
 // printCounter prints all packet layers and their count
 func printCounter() {
-	for l, c := range counter {
+	for l, c := range counter.getAll() {
 		fmt.Println(l, c)
 	}
 }

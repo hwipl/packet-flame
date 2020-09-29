@@ -62,7 +62,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		}
 
 	}
-	counter[layers]++
+	counter.add(layers, 1)
 }
 
 // listen captures packets on the network interface or reads them from a pcap
