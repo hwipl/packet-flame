@@ -24,6 +24,9 @@ var (
 
 	// packet layer packet/byte counter
 	counter = newCountMap()
+
+	// http settings
+	httpListen string
 )
 
 // parseCommandLine parses the command line arguments
@@ -58,6 +61,10 @@ func parseCommandLine() {
 	flag.BoolVar(&showDirections, "with-directions", showDirections,
 		"show flow directions in MAC, IP, port output")
 
+	// http settings
+	flag.StringVar(&httpListen, "http", httpListen,
+		"use http server and set the listen `address` (e.g.: :8000)")
+
 	// parse and overwrite default values of settings
 	flag.Parse()
 }
@@ -72,6 +79,9 @@ func printCounter() {
 // Run is the main entry point
 func Run() {
 	parseCommandLine()
+	if httpListen != "" {
+		go runHTTPServer(httpListen)
+	}
 	listen()
 	printCounter()
 }

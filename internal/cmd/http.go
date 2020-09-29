@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"sort"
 )
@@ -36,5 +37,5 @@ func handleRawRequest(w http.ResponseWriter, r *http.Request) {
 func runHTTPServer(address string) {
 	http.HandleFunc("/", handleRequest)
 	http.HandleFunc("/raw", handleRawRequest)
-	http.ListenAndServe(address, nil)
+	log.Fatal(http.ListenAndServe(address, nil))
 }
