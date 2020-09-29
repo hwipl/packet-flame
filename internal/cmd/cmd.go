@@ -27,6 +27,9 @@ var (
 
 	// http settings
 	httpListen string
+
+	// flamegraph tool settings
+	flamegraphExe  string
 )
 
 // parseCommandLine parses the command line arguments
@@ -64,6 +67,11 @@ func parseCommandLine() {
 	// http settings
 	flag.StringVar(&httpListen, "http", httpListen,
 		"use http server and set the listen `address` (e.g.: :8000)")
+
+	// flamegraph tool settings
+	flag.StringVar(&flamegraphExe, "fg-exe", flamegraphExe,
+		"set the flamegraph `executable` for graph generation "+
+			"(e.g.: flamegraph.pl)")
 
 	// parse and overwrite default values of settings
 	flag.Parse()
