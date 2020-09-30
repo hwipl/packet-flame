@@ -140,6 +140,13 @@ func printOutput() {
 		return
 	}
 
+	// if a flamegraph tool is configured create and print flamegraph to
+	// the console
+	if flamegraphExe != "" {
+		createFlamegraph(os.Stdout)
+		return
+	}
+
 	// print raw packet layers and counts to console
 	printCounter()
 }
