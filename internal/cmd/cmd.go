@@ -3,6 +3,9 @@ package cmd
 import (
 	"flag"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
 	"strings"
 )
 
@@ -130,12 +133,32 @@ func printCounter() {
 	}
 }
 
+// handleInterrupt handles an interrupt signal sent to this process
+func handleInterrupt() {
+	// setup interrupt handler
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+
+	// wait for interrupt
+	<-c
+	log.Println("Received interrupt")
+
+	// if we are not operating in http mode, print to the console
+	if httpListen == "" {
+		printCounter()
+	}
+
+	// stop program
+	os.Exit(0)
+}
+
 // Run is the main entry point
 func Run() {
 	parseCommandLine()
 	if httpListen != "" {
 		go runHTTPServer(httpListen)
 	}
+	go handleInterrupt()
 	listen()
 	printCounter()
 }
