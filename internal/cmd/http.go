@@ -5,9 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os/exec"
 	"sort"
-	"strings"
 )
 
 // handleRequest returns the flamegraph to http clients
@@ -18,24 +16,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// generate input string for flamegraph tool
-	input := ""
-	for l, c := range counter.getAll() {
-		input += fmt.Sprintln(l, c)
-	}
-
 	// generate flamegraph
-	cmd := exec.Command(flamegraphExe)
-	if flamegraphArgs != nil {
-		cmd = exec.Command(flamegraphExe, flamegraphArgs...)
-	}
-	cmd.Stdin = strings.NewReader(input)
-	cmd.Stdout = w
-	err := cmd.Run()
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	createFlamegraph(w)
 }
 
 // handleRawRequest returns the raw stats to http clients
