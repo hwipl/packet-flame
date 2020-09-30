@@ -133,6 +133,17 @@ func printCounter() {
 	}
 }
 
+// printOutput prints raw packet data or a flamegraph to the console
+func printOutput() {
+	// if we are operating in http mode, do not print to the console
+	if httpListen != "" {
+		return
+	}
+
+	// print raw packet layers and counts to console
+	printCounter()
+}
+
 // handleInterrupt handles an interrupt signal sent to this process
 func handleInterrupt() {
 	// setup interrupt handler
@@ -143,12 +154,8 @@ func handleInterrupt() {
 	<-c
 	log.Println("Received interrupt")
 
-	// if we are not operating in http mode, print to the console
-	if httpListen == "" {
-		printCounter()
-	}
-
-	// stop program
+	// print output and stop program
+	printOutput()
 	os.Exit(0)
 }
 
@@ -160,5 +167,5 @@ func Run() {
 	}
 	go handleInterrupt()
 	listen()
-	printCounter()
+	printOutput()
 }
