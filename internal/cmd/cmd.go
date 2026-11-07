@@ -1,3 +1,4 @@
+// Package cmd contains the packet-flame implementation.
 package cmd
 
 import (
@@ -15,9 +16,9 @@ var (
 	pcapFile    string
 	pcapPromisc bool = true
 	pcapSnaplen int  = 1024
-	pcapTimeout int  = 0
-	pcapMaxPkts int  = 0
-	pcapMaxTime int  = 0
+	pcapTimeout int
+	pcapMaxPkts int
+	pcapMaxTime int
 	pcapFilter  string
 
 	// display settings
