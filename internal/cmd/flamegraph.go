@@ -12,10 +12,11 @@ import (
 // it to the Writer w
 func createFlamegraph(w io.Writer) {
 	// generate input string for flamegraph tool
-	input := ""
+	var builder strings.Builder
 	for l, c := range counter.getAll() {
-		input += fmt.Sprintln(l, c)
+		fmt.Fprintln(&builder, l, c)
 	}
+	input := builder.String()
 
 	// generate flamegraph
 	cmd := exec.Command(flamegraphExe)
