@@ -21,7 +21,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleRawRequest returns the raw stats to http clients
-func handleRawRequest(w http.ResponseWriter, r *http.Request) {
+func handleRawRequest(w http.ResponseWriter, _ *http.Request) {
 	// get all counters
 	m := counter.getAll()
 
