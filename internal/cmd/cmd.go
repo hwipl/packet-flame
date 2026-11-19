@@ -78,9 +78,9 @@ func parseFlamegraphArgs(fgArgs string) []string {
 func parseCommandLine() {
 	// pcap settings
 	flag.StringVar(&pcapFile, "f", pcapFile,
-		"read packets from a pcap file and set it to `file`")
+		"read packets from a pcap `file`")
 	flag.StringVar(&pcapDevice, "i", pcapDevice, "read packets from "+
-		"a network interface (default) and set it to `interface`")
+		"a network `interface` (default)")
 	flag.BoolVar(&pcapPromisc, "pcap-promisc", pcapPromisc,
 		"set network interface to promiscuous mode")
 	flag.IntVar(&pcapSnaplen, "pcap-snaplen", pcapSnaplen,
@@ -88,13 +88,13 @@ func parseCommandLine() {
 	flag.IntVar(&pcapTimeout, "pcap-timeout", pcapTimeout,
 		"set pcap timeout to `milliseconds`")
 	flag.IntVar(&pcapMaxPkts, "pcap-maxpkts", pcapMaxPkts,
-		"set maximum packets to capture to `number` "+
+		"set maximum `number` of packets to capture "+
 			"(may require pcap-timeout argument)")
 	flag.IntVar(&pcapMaxTime, "pcap-maxtime", pcapMaxTime,
 		"set maximum capturing time to `seconds` "+
 			"(may require pcap-timeout argument)")
 	flag.StringVar(&pcapFilter, "pcap-filter", pcapFilter,
-		"set pcap packet filter to `filter` (e.g.: \"not port 22\")")
+		"set pcap packet `filter` (e.g.: \"not port 22\")")
 
 	// display settings
 	flag.BoolVar(&showMACs, "with-macs", showMACs,
