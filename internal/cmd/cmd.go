@@ -45,7 +45,7 @@ var (
 func parseFlamegraphArgs(fgArgs string) []string {
 	args := []string{}
 	text := ""
-	for _, s := range strings.Fields(fgArgs) {
+	for s := range strings.FieldsSeq(fgArgs) {
 		if strings.HasPrefix(s, "-") {
 			// add concatenated text as separate argument
 			if text != "" {
